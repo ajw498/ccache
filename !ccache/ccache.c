@@ -544,7 +544,7 @@ static char *check_extension(const char *fname)
 
 	p++;
 	for (i=0; extensions[i].extension; i++) {
-		if (strcmp(p, extensions[i].extension) == 0 || strncmp(q, extensions[i].extension, p - q - 1) == 0)) {
+		if (strcmp(p, extensions[i].extension) == 0 || strncmp(q, extensions[i].extension, p - q - 1) == 0) {
 			return extensions[i].i_extension;
 		}
 	}
