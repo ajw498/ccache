@@ -1,0 +1,3 @@
+Dir <Obey$Dir>
+Remove ccache/zip
+zip -r -9 ccache/zip !ccache COPYING -x */o/* *CVS*
