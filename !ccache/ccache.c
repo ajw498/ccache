@@ -341,11 +341,12 @@ static void find_compiler(int argc, char **argv)
 		char *fname;
 #ifdef __riscos__
 		x_asprintf(&fname, "%s%s", tok, base);
+		printf("Checking %s\n",fname);
 #else
 		x_asprintf(&fname, "%s/%s", tok, base);
 #endif
 		/* look for a normal executable file */
-		if (access(fname, X_OK) == 0 &&
+		if (/*access(fname, X_OK) == 0 &&*/
 		    lstat(fname, &st1) == 0 &&
 		    stat(fname, &st2) == 0 &&
 		    S_ISREG(st2.st_mode)) {
@@ -387,13 +388,20 @@ static int check_extension(const char *fname)
 {
 	char *extensions[] = {"c", "C", "m", "cc", "CC", "cpp", "CPP", "cxx", "CXX", 0};
 	int i;
-	char *p;
+	char *p, *q;
 
 	p = strrchr(fname, '.');
 	if (!p) return -1;
+	if (p <= fname) return -1;
+
+	q = p - 1;
+	while (q > fname && *q != '.') q--;
+	if (*q == '.') q++;
+
 	p++;
 	for (i=0; extensions[i]; i++) {
 		if (strcmp(p, extensions[i]) == 0) return 0;
+		if (strncmp(q, extensions[i], p - q - 1) == 0) return 0;
 	}
 	return -1;
 }
