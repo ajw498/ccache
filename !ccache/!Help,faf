@@ -1,0 +1,37 @@
+
+
+<html><head><title>ccache</title>
+
+</head>
+<body>
+
+
+<h1>ccache 1.4</h1>
+<h2>RISC OS port, version 1.00</h2>
+
+
+<p>
+ccache is a compiler cache. It speeds up re-compilation of C/C++ code
+by caching previous compiles and detecting when the same compile is
+being done again.
+<p>
+This file only decribes things specific to RISC OS. For other details,
+please see the <a href="ccache-man">ccache man page</a>
+(but ignore the section about installing).
+<p>
+ccache as supplied only works with gcc, but should work with any C/C++
+compiler that is linked with UnixLib. It does not work with Norcroft,
+although if there is sufficient demand I may add support for it.
+<p>
+To use, just run !ccache. This will set up an alias so that all calls
+to gcc call ccache instead. Then use gcc as you would normally.
+<p>
+By default, the cache is stored in !Scrap, but you can change this if
+you wish by editing the !Run file.
+<p>
+The cache can be maintained by calling ccache from the command line. The
+options available are detailed in the <a href="ccache-man">ccache man page</a>.
+<p>
+ccache was ported to RISC OS by <a href="mailto:alex@alexwaugh.com">Alex Waugh</a>
+</body>
+</html>
