@@ -117,9 +117,9 @@ static void to_cache(ARGS *args)
 	struct stat st1, st2;
 	int status;
 
-	x_asprintf(&tmp_stdout, "%s/tmp.stdout.%d", cache_dir, getpid());
-	x_asprintf(&tmp_stderr, "%s/tmp.stderr.%d", cache_dir, getpid());
-	x_asprintf(&tmp_hashname, "%s/tmp.hash.%d.o", cache_dir, getpid());
+	x_asprintf(&tmp_stdout, "%s/tmpstdout%d", cache_dir, getpid());
+	x_asprintf(&tmp_stderr, "%s/tmpstderr%d", cache_dir, getpid());
+	x_asprintf(&tmp_hashname, "%s/tmphash%d.o", cache_dir, getpid());
 
 	args_add(args, "-o");
 	args_add(args, tmp_hashname);
@@ -271,9 +271,9 @@ static void find_hash(ARGS *args)
 	hash_int(st.st_mtime);
 
 	/* now the run */
-	x_asprintf(&path_stdout, "%s/tmp.stdout.%d.%s", cache_dir, getpid(), 
+	x_asprintf(&path_stdout, "%s/tmpstdout%d.%s", cache_dir, getpid(),
 		   i_extension);
-	x_asprintf(&path_stderr, "%s/tmp.cpp_stderr.%d", cache_dir, getpid());
+	x_asprintf(&path_stderr, "%s/tmpcpp_stderr%d", cache_dir, getpid());
 
 	args_add(args, "-E");
 	args_add(args, input_file);
