@@ -118,8 +118,8 @@ void x_asprintf(char **ptr, const char *format, ...)
 	va_start(ap, format);
 	vasprintf(ptr, format, ap);
 	va_end(ap);
-	
-	if (!ptr) fatal("out of memory in x_asprintf");
+
+	if (!*ptr) fatal("out of memory in x_asprintf");
 }
 
 /*
