@@ -107,6 +107,7 @@ void mdfour_begin(struct mdfour *md)
 	md->C = 0x98badcfe;
 	md->D = 0x10325476;
 	md->totalN = 0;
+	md->tail_len = 0;
 }
 
 
@@ -141,9 +142,27 @@ void mdfour_update(struct mdfour *md, const unsigned char *in, int n)
 {
 	uint32 M[16];
 
-	if (n == 0) mdfour_tail(in, n);
-
 	m = md;
+
+	if (in == NULL) {
+		mdfour_tail(md->tail, md->tail_len);
+		return;
+	}
+
+	if (md->tail_len) {
+		int len = 64 - md->tail_len;
+		if (len > n) len = n;
+		memcpy(md->tail+md->tail_len, in, len);
+		md->tail_len += len;
+		n -= len;
+		in += len;
+		if (md->tail_len == 64) {
+			copy64(M, md->tail);
+			mdfour64(M);
+			m->totalN += 64;
+			md->tail_len = 0;
+		}
+	}
 
 	while (n >= 64) {
 		copy64(M, in);
@@ -153,7 +172,10 @@ void mdfour_update(struct mdfour *md, const unsigned char *in, int n)
 		m->totalN += 64;
 	}
 
-	if (n) mdfour_tail(in, n);
+	if (n) {
+		memcpy(md->tail, in, n);
+		md->tail_len = n;
+	}
 }
 
 
@@ -168,11 +190,12 @@ void mdfour_result(struct mdfour *md, unsigned char *out)
 }
 
 
-void mdfour(unsigned char *out, unsigned char *in, int n)
+void mdfour(unsigned char *out, const unsigned char *in, int n)
 {
 	struct mdfour md;
 	mdfour_begin(&md);
 	mdfour_update(&md, in, n);
+	mdfour_update(&md, NULL, 0);
 	mdfour_result(&md, out);
 }
 
@@ -181,28 +204,35 @@ static void file_checksum1(char *fname)
 {
 	int fd, i;
 	struct mdfour md;
-	unsigned char buf[64*1024], sum[16];
+	unsigned char buf[1024], sum[16];
+	unsigned chunk;
 	
 	fd = open(fname,O_RDONLY);
 	if (fd == -1) {
 		perror("fname");
 		exit(1);
 	}
+
+	chunk = 1 + random() % (sizeof(buf) - 1);
 	
 	mdfour_begin(&md);
 
 	while (1) {
-		int n = read(fd, buf, sizeof(buf));
-		if (n <= 0) break;
-		mdfour_update(&md, buf, n);
+		int n = read(fd, buf, chunk);
+		if (n >= 0) {
+			mdfour_update(&md, buf, n);
+		}
+		if (n < chunk) break;
 	}
 
 	close(fd);
 
+	mdfour_update(&md, NULL, 0);
+
 	mdfour_result(&md, sum);
 
 	for (i=0;i<16;i++)
-		printf("%02X", sum[i]);
+		printf("%02x", sum[i]);
 	printf("\n");
 }
 
@@ -238,7 +268,7 @@ static void file_checksum2(char *fname)
 	memcpy(sum, md.buffer, 16);
 
 	for (i=0;i<16;i++)
-		printf("%02X", sum[i]);
+		printf("%02x", sum[i]);
 	printf("\n");
 }
 #endif

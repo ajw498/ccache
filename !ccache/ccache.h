@@ -1,4 +1,4 @@
-#define CCACHE_VERSION "1.4"
+#define CCACHE_VERSION "1.9"
 
 #include "config.h"
 
@@ -47,6 +47,9 @@ enum stats {
 	STATS_NOTC,
 	STATS_DEVICE,
 	STATS_NOINPUT,
+	STATS_MULTIPLE,
+	STATS_CONFTEST,
+	STATS_UNSUPPORTED,
 
 	STATS_END
 };
@@ -93,7 +96,13 @@ void stats_set_sizes(const char *dir, size_t num_files, size_t total_size);
 
 int unify_hash(const char *fname);
 
+#ifndef HAVE_VASPRINTF
+int vasprintf(char **, const char *, va_list );
+#endif
 
+#ifndef HAVE_SNPRINTF
+int snprintf(char *,size_t ,const char *, ...);
+#endif
 
 void cleanup_dir(const char *dir, size_t maxfiles, size_t maxsize);
 void cleanup_all(const char *dir);
@@ -112,3 +121,8 @@ ARGS *args_init(void);
 void args_add(ARGS *args, const char *s);
 void args_pop(ARGS *args, int n);
 
+#if HAVE_COMPAR_FN_T
+#define COMPAR_FN_T __compar_fn_t
+#else
+typedef int (*COMPAR_FN_T)(const void *, const void *);
+#endif
