@@ -4,8 +4,11 @@
 /* Define if you have the `asprintf' function. */
 /* #undef HAVE_ASPRINTF */
 
+#define vsnprintf smb_vsnprintf
+#define snprint smb_snprintf
+
 /* */
-#define HAVE_C99_VSNPRINTF 1
+/*#define HAVE_C99_VSNPRINTF 1*/
 
 /* Define if you have the <dirent.h> header file, and it defines `DIR'. */
 #define HAVE_DIRENT_H 1

@@ -751,7 +751,7 @@ static void dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c)
 
 /* yes this really must be a ||. Don't muck with this (tridge) */
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
- int vsnprintf (char *str, size_t count, const char *fmt, va_list args)
+ int smb_vsnprintf (char *str, size_t count, const char *fmt, va_list args)
 {
 	return dopr(str, count, fmt, args);
 }
@@ -766,7 +766,7 @@ static void dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c)
  * linkers? -- mbp
  */
 #if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_SNPRINTF)
- int snprintf(char *str,size_t count,const char *fmt,...)
+ int smb_snprintf(char *str,size_t count,const char *fmt,...)
 {
 	size_t ret;
 	va_list ap;
