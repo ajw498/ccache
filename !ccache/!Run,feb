@@ -1,0 +1,3 @@
+Set Run$Path <Run$Path>,<Obey$Dir>.
+Set Alias$gcc ccache gcc %%*0
+Set UnixEnv$CCACHE_DIR /tmp/ccache
