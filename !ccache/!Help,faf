@@ -19,9 +19,8 @@ This file only decribes things specific to RISC OS. For other details,
 please see the <a href="ccache-man">ccache man page</a>
 (but ignore the section about installing).
 <p>
-ccache as supplied only works with gcc, but should work with any C/C++
-compiler that is linked with UnixLib. It does not work with Norcroft,
-although if there is sufficient demand I may add support for it.
+ccache currently only works with gcc, but I may add support for other
+compilers if there is a demand.
 <p>
 To use, just run !ccache. This will set up an alias so that all calls
 to gcc call ccache instead. Then use gcc as you would normally.

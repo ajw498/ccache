@@ -341,12 +341,11 @@ static void find_compiler(int argc, char **argv)
 		char *fname;
 #ifdef __riscos__
 		x_asprintf(&fname, "%s%s", tok, base);
-		printf("Checking %s\n",fname);
 #else
 		x_asprintf(&fname, "%s/%s", tok, base);
 #endif
 		/* look for a normal executable file */
-		if (/*access(fname, X_OK) == 0 &&*/
+		if (access(fname, X_OK) == 0 &&
 		    lstat(fname, &st1) == 0 &&
 		    stat(fname, &st2) == 0 &&
 		    S_ISREG(st2.st_mode)) {
