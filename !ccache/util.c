@@ -242,7 +242,11 @@ int lock_fd(int fd)
 	fl.l_len = 1;
 	fl.l_pid = 0;
 
+#ifdef __riscos__
+	return 0;
+#else
 	return fcntl(fd, F_SETLKW, &fl);
+#endif
 }
 
 /* return size on disk of a file */

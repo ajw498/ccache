@@ -249,6 +249,7 @@ int unify_hash(const char *fname)
 		return -1;
 	}
 
+#ifdef HAVE_MMAP
 	/* we use mmap() to make it easy to handle arbitrarily long
            lines in preprocessor output. I have seen lines of over
            100k in length, so this is well worth it */
@@ -257,13 +258,24 @@ int unify_hash(const char *fname)
 		cc_log("Failed to mmap %s\n", fname);
 		return -1;
 	}
+#else
+	map = malloc(st.st_size);
+	if (map == NULL) {
+		cc_log("Failed to malloc for %s\n", fname);
+		return -1;
+	}
+	read(fd, map, st.st_size);
+#endif
 	close(fd);
 
 	/* pass it through the unifier */
 	unify((unsigned char *)map, st.st_size);
 
+#ifdef HAVE_MMAP
 	munmap(map, st.st_size);
-
+#else
+	free(map);
+#endif
 	return 0;
 }
 

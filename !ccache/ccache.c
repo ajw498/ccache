@@ -22,6 +22,12 @@
 
 #include "ccache.h"
 
+#ifdef __riscos__
+#define PATH_SEPARATOR ","
+#else
+#define PATH_SEPARATOR ":"
+#endif
+
 char *cache_dir = NULL;
 char *cache_logfile = NULL;
 static ARGS *stripped_args;
@@ -316,7 +322,11 @@ static void find_compiler(int argc, char **argv)
 
 	path = getenv("CCACHE_PATH");
 	if (!path) {
+#ifdef __riscos__
+		path = getenv("Run$Path");
+#else
 		path = getenv("PATH");
+#endif
 	}
 	if (!path) {
 		cc_log("no PATH variable!?\n");
@@ -327,11 +337,11 @@ static void find_compiler(int argc, char **argv)
 	
 	/* search the path looking for the first compiler of the right name
 	   that isn't us */
-	for (tok=strtok(path,":"); tok; tok = strtok(NULL, ":")) {
+	for (tok=strtok(path,PATH_SEPARATOR); tok; tok = strtok(NULL, PATH_SEPARATOR)) {
 		char *fname;
 		x_asprintf(&fname, "%s/%s", tok, base);
 		/* look for a normal executable file */
-		if (access(fname, X_OK) == 0 &&
+		if (/*access(fname, X_OK) == 0 &&*/
 		    lstat(fname, &st1) == 0 &&
 		    stat(fname, &st2) == 0 &&
 		    S_ISREG(st2.st_mode)) {

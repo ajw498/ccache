@@ -2,7 +2,7 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
 /* Define if you have the `asprintf' function. */
-#define HAVE_ASPRINTF 1
+/* #undef HAVE_ASPRINTF */
 
 /* */
 #define HAVE_C99_VSNPRINTF 1
@@ -29,7 +29,7 @@
 #define HAVE_SYS_WAIT_H 1
 
 /* Define if you have the `vasprintf' function. */
-#define HAVE_VASPRINTF 1
+/* #undef HAVE_VASPRINTF */
 
 /* Define if you have the `vsnprintf' function. */
 #define HAVE_VSNPRINTF 1
