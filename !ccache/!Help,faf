@@ -32,6 +32,9 @@ you wish by editing the !Run file.
 The cache can be maintained by calling ccache from the command line. The
 options available are detailed in the <a href="ccache-man">ccache man page</a>.
 <p>
+<h6>Limitations:</h6>
+Throwback does not occur on a cache hit.
+<p> 
 ccache was ported to RISC OS by <a href="mailto:alex@alexwaugh.com">Alex Waugh</a>
 </body>
 </html>
